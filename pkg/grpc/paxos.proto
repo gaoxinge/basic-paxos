@@ -1,0 +1,33 @@
+syntax = "proto3";
+package grpc;
+
+message Term {
+  string id = 1;
+  int64 no = 2;
+}
+
+message Vote {
+  Term term = 1;
+  string value = 2;
+}
+
+message Message {
+  Term term = 1;
+  int64 type = 2;
+  string from = 3;
+  string to = 4;
+  bool ok = 5;
+  message Content {
+    oneof result {
+      Vote vote = 1;
+      string value = 2;
+    }
+  }
+  map<string, Content> content = 6;
+}
+
+message Empty {}
+
+service Service {
+  rpc Handle(Message) returns (Empty);
+}
